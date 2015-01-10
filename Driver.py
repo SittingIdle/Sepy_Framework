@@ -26,8 +26,10 @@ def readTestSuiteXlsxFile():
     global intCounter
     sIniFilePath = frameworkPath + "\\config.ini"
     setValueIntoINIFile(sIniFilePath, "Other", "FrameworkPath", frameworkPath)
-    current_time = datetime.now().strftime('%Y%m%d%H%M%S')
+    current_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     logFile = frameworkPath + "\\Logs\\GL_" + current_time + ".log"
+    setValueIntoINIFile(sIniFilePath , "Other", "SuiteStartTime", current_time)
+    setValueIntoINIFile(sIniFilePath , "Other", "SuiteEndTime", current_time)
     setValueIntoINIFile(sIniFilePath , "Other", "Log File", logFile)
     setValueIntoINIFile(sIniFilePath , "Other", "TestCase Status", "")
     setValueIntoINIFile(sIniFilePath , "Other", "TestCase_FileName", "")
@@ -62,6 +64,8 @@ def readTestSuiteXlsxFile():
             setValueIntoINIFile(sIniFilePath , "Other", "TestCase Status", "")
             setValueIntoINIFile(sIniFilePath , "Other", "TestCase_FileName", "")
             setValueIntoINIFile(sIniFilePath , "Other", "Test Case Name", "")
+            End_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+            setValueIntoINIFile(sIniFilePath , "Other", "SuiteEndTime", End_time)
 
 ######################################################################################
 def setValueIntoINIFile(filePath , headerName, propertyName, propertyValue):
@@ -107,7 +111,9 @@ def Complete_Report():
     sTestCaseName = getValueFromINIFile_Dr(sIniPath , "Other", "Test Case Name")
     sTC_Status = getValueFromINIFile_Dr(sIniPath , "Other", "TestCase Status")
     sTC_FileName = getValueFromINIFile_Dr(sIniPath , "Other", "TestCase_FileName")
-    sRunStartTime = datetime.now().strftime('%Y/%m/%d  %H:%M:%S')
+    sRunStartTime = getValueFromINIFile_Dr(sIniPath , "Other", "SuiteStartTime")
+    sRunEndTime = getValueFromINIFile_Dr(sIniPath , "Other", "SuiteEndTime")
+##    sRunStartTime = datetime.now().strftime('%Y/%m/%d  %H:%M:%S')
     if sTC_Status.lower() == "pass":
         StatusDetbgcolor='"#BCE954"'
     elif sTC_Status.lower() == "fail":
@@ -125,8 +131,10 @@ def Complete_Report():
         sFile.write('<html><HEAD><TITLE>Automation Report</TITLE></HEAD><body><h4 align="center"><FONT COLOR="660066" FACE="Arial"SIZE=5><b>Automation Test Report</b><img src="' + sImagePath + '" alt="Xebia" align="right"></h4>')
         sFile.write('<table cellspacing=1 cellpadding=1   border=1> <tr>')
         sFile.write('<h4> <FONT COLOR="660000" FACE="Arial" SIZE=4.5> Test Details :</h4>')
-        sFile.write('<td width=150 align="left" bgcolor="#8904B1"><FONT COLOR="#E0E0E0" FACE="Arial" SIZE=2.75><b>Run Date</b></td>')
+        sFile.write('<td width=150 align="left" bgcolor="#8904B1"><FONT COLOR="#E0E0E0" FACE="Arial" SIZE=2.75><b>Run Start Date Time</b></td>')
         sFile.write('<td width=150 align="left"><FONT COLOR="#153E7E" FACE="Arial" SIZE=2.75><b>'+ sRunStartTime +'</b></td></tr>')
+        sFile.write('<td width=150 align="left" bgcolor="#8904B1"><FONT COLOR="#E0E0E0" FACE="Arial" SIZE=2.75><b>Run End Date Time</b></td>')
+        sFile.write('<td width=150 align="left"><FONT COLOR="#153E7E" FACE="Arial" SIZE=2.75><b>'+ sRunEndTime +'</b></td></tr>')
         sFile.write('<tr  border=1><td width=150 align="left" bgcolor="#8904B1"><FONT COLOR="#E0E0E0" FACE="Arial" SIZE=2.75><b>User Requested</b></td>')
         sFile.write('<td width=150 align="left"><FONT COLOR="#153E7E" FACE="Arial" SIZE=2.75><b>'+ sUserReq +'</b></td></tr>')
         sFile.write('<tr  border=1><td width=150 align="left" bgcolor="#8904B1"><FONT COLOR="#E0E0E0" FACE="Arial" SIZE=2.75><b>Environment</b></td>')
