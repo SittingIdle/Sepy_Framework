@@ -10,11 +10,6 @@ global frameworkPath
 frameworkPath = os.getcwd()
 print frameworkPath
 
-##sPathSpliter = currDir.split("\\")
-##print len(sPathSpliter)
-##frameworkPath = sPathSpliter[0]
-##for i in range(1, len(sPathSpliter)):
-##    frameworkPath = frameworkPath + "\\" + sPathSpliter[i]
 sCurrentTime = datetime.now().strftime('%Y%m%d_%H%M%S')
 global intCounter
 intCounter = 0
@@ -29,7 +24,6 @@ def readTestSuiteXlsxFile():
     current_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     logFile = frameworkPath + "\\Logs\\GL_" + current_time + ".log"
     setValueIntoINIFile(sIniFilePath , "Other", "SuiteStartTime", current_time)
-##    setValueIntoINIFile(sIniFilePath , "Other", "SuiteEndTime", current_time)
     setValueIntoINIFile(sIniFilePath , "Other", "Log File", logFile)
     setValueIntoINIFile(sIniFilePath , "Other", "TestCase Status", "")
     setValueIntoINIFile(sIniFilePath , "Other", "TestCase_FileName", "")
@@ -60,8 +54,6 @@ def readTestSuiteXlsxFile():
             sTCReportPath = frameworkPath + "\\Reports\\TestCaseReport\\" + sTCFileName
             setValueIntoINIFile(sIniFilePath , "Other", "TestCase_Path", sTCReportPath)
             execfile(sFilePath)
-##            End_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-##            setValueIntoINIFile(sIniFilePath , "Other", "SuiteEndTime", End_time)
             Complete_Report()
             setValueIntoINIFile(sIniFilePath , "Other", "TestCase Status", "")
             setValueIntoINIFile(sIniFilePath , "Other", "TestCase_FileName", "")
