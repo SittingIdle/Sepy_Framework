@@ -60,12 +60,12 @@ def readTestSuiteXlsxFile():
             sTCReportPath = frameworkPath + "\\Reports\\TestCaseReport\\" + sTCFileName
             setValueIntoINIFile(sIniFilePath , "Other", "TestCase_Path", sTCReportPath)
             execfile(sFilePath)
+            End_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+            setValueIntoINIFile(sIniFilePath , "Other", "SuiteEndTime", End_time)
             Complete_Report()
             setValueIntoINIFile(sIniFilePath , "Other", "TestCase Status", "")
             setValueIntoINIFile(sIniFilePath , "Other", "TestCase_FileName", "")
             setValueIntoINIFile(sIniFilePath , "Other", "Test Case Name", "")
-            End_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-            setValueIntoINIFile(sIniFilePath , "Other", "SuiteEndTime", End_time)
 
 ######################################################################################
 def setValueIntoINIFile(filePath , headerName, propertyName, propertyValue):
