@@ -372,6 +372,7 @@ def setValueIntoINIFile_GL(filePath , headerName, propertyName, propertyValue):
 def closeBrowser():
     try:
         driver.close()
+        driver.quit()
         sStatusMessage = "Browser Close"
         sStatus = "Pass"
     except Exception, e:
@@ -398,6 +399,28 @@ def clickOnSubmenuItem(oLocatorMenu,oLocatorSubMenu):
     except Exception, e:
         sStatus = "Fail"
         sStatusMessage = "Unexpected error for Locator - '" + oLocatorSubMenu + "' : " + str(e)
+    ##        sStatusMessage = "Unexpected error for Locator - '" + oLocator + "' : "
+##    log.info(sStatusMessage)
+    tcReport("inputText", eResult, sStatusMessage, sStatus)
+    return sStatus
+
+#########################################################################################
+def clickAlert():
+    global driver
+
+    eResult = "Should perform operation on alert successfully"
+    try:
+        WebDriverWait(driver, 3).until(EC.alert_is_present(),
+                                   'Timed out waiting for PA creation ' +
+                                   'confirmation popup to appear.')
+        alert = driver.switch_to_alert()
+        alert.accept()
+        sStatus = "Pass"
+        sStatusMessage = "Alert handled." 
+    except Exception, e:
+        print str(e)
+        sStatus = "Fail"
+        sStatusMessage = "Unexpected error for Alert" 
     ##        sStatusMessage = "Unexpected error for Locator - '" + oLocator + "' : "
 ##    log.info(sStatusMessage)
     tcReport("inputText", eResult, sStatusMessage, sStatus)
