@@ -12,6 +12,7 @@ from mysql.connector import errorcode
 import ConfigParser
 import logging
 from selenium.webdriver.common.action_chains import ActionChains
+import autopy
 
 current_time = datetime.now().strftime('%Y%m%d%H%M%S')
 print current_time
@@ -109,6 +110,8 @@ def openBrowser(url) :
         
     driver.implicitly_wait(60) 
     driver.get(url)
+    driver.maximize_window()
+    driver.execute_script("window.focus();")
     eResult = "Open URL:- '" + url + "'."
     aResult = "Open URL sucessfully"
     tcReport("openBrowser", eResult, aResult, "Pass")
@@ -401,31 +404,46 @@ def clickOnSubmenuItem(oLocatorMenu,oLocatorSubMenu):
         sStatusMessage = "Unexpected error for Locator - '" + oLocatorSubMenu + "' : " + str(e)
     ##        sStatusMessage = "Unexpected error for Locator - '" + oLocator + "' : "
 ##    log.info(sStatusMessage)
-    tcReport("inputText", eResult, sStatusMessage, sStatus)
+    tcReport("clickOnSubmenuItem", eResult, sStatusMessage, sStatus)
     return sStatus
 
 #########################################################################################
 def clickAlert():
     global driver
-
+    print "inside alert function"
     eResult = "Should perform operation on alert successfully"
     try:
         WebDriverWait(driver, 3).until(EC.alert_is_present(),
                                    'Timed out waiting for PA creation ' +
                                    'confirmation popup to appear.')
+        print "aaaaaa"
         alert = driver.switch_to_alert()
         alert.accept()
         sStatus = "Pass"
-        sStatusMessage = "Alert handled." 
+        sStatusMessage = "Alert handled."
+        print sStatusMessage
     except Exception, e:
         print str(e)
         sStatus = "Fail"
         sStatusMessage = "Unexpected error for Alert" 
     ##        sStatusMessage = "Unexpected error for Locator - '" + oLocator + "' : "
 ##    log.info(sStatusMessage)
-    tcReport("inputText", eResult, sStatusMessage, sStatus)
+    tcReport("clickAlert", eResult, sStatusMessage, sStatus)
     return sStatus
 
+#########################################################################################
+def takeScreenShot():
+    currTime = datetime.now().strftime('%Y%m%d%H%M%S')
+    scrrenShotName = "Ss_" + currTime + ".png"
+    screenShotPath = frameworkPath + "//Reports//Screenshots//" + scrrenShotName
+    print screenShotPath
+##    driver.get_screenshot_as_file(screenShotPath)
+##    im=ImageGrab.grab()
+##    im.save(screenShotPath)
+    bitmap = autopy.bitmap.capture_screen()
+    bitmap.save(screenShotPath)
+    return screenShotPath
+    
 #########################################################################################
 def tcReport(stepName, expectedResult, ActualResult, status):
     StatusDetbgcolor=""
@@ -465,16 +483,24 @@ def tcReport(stepName, expectedResult, ActualResult, status):
         sFile.write('<h4> <FONT COLOR="660000" FACE="Arial" SIZE=4.5> Detailed Report :</h4><table  border=1 cellspacing=1    cellpadding=1 ><tr> ')
         sFile.write('<td width=80  align="center" bgcolor="#153E7E"><FONT COLOR="#E0E0E0" FACE="Arial" SIZE=2><b>Step Name</b></td>')
         sFile.write('<td width=75 align="center" bgcolor="#153E7E"><FONT COLOR="#E0E0E0" FACE="Arial" SIZE=2><b>Status</b></td>')
-        sFile.write('<td width=600 align="center" bgcolor="#153E7E"><FONT COLOR="#E0E0E0" FACE="Arial" SIZE=2><b>Expected Result</b></td>')
-        sFile.write('<td width=600 align="center" bgcolor="#153E7E"><FONT COLOR="#E0E0E0" FACE="Arial" SIZE=2><b>Actual Result</b></td></tr>')
+        sFile.write('<td width=300 align="center" bgcolor="#153E7E"><FONT COLOR="#E0E0E0" FACE="Arial" SIZE=2><b>Expected Result</b></td>')
+        sFile.write('<td width=300 align="center" bgcolor="#153E7E"><FONT COLOR="#E0E0E0" FACE="Arial" SIZE=2><b>Actual Result</b></td>')
+        sFile.write('<td width=200 align="center" bgcolor="#153E7E"><FONT COLOR="#E0E0E0" FACE="Arial" SIZE=2><b>ScreenShot</b></td></tr>')
     else:
         sFile = open(sReportPath, "a")
 
     #Append test report after creating
+    sScreenShotPath = takeScreenShot()
+    print sScreenShotPath
+    screenShotNameSpliter = sScreenShotPath.split("Screenshots//")
+    print screenShotNameSpliter
+    screenShotName = screenShotNameSpliter[1]
+    print screenShotName
     sFile.write('<tr><td width=80 align="center"><FONT COLOR="#153E7E" FACE="Arial" SIZE=1><b>' + str(stepName) + '</b></td>')
     sFile.write('<td width=75 align="center" bgcolor=' + StatusDetbgcolor + '><FONT COLOR="#153E7E" FACE="Arial" SIZE=1><b>' + str(status) + '</b></td>')
-    sFile.write('<td width=600 align="left"><FONT COLOR="#153E7E" FACE="Arial" SIZE=1><b>' + str(expectedResult) + '</b></td>')
-    sFile.write('<td width=600 align="left"><FONT COLOR="#153E7E" FACE="Arial" SIZE=1><b>' + ActualResult.encode('ascii', 'ignore') + '</b></td></tr> ')
+    sFile.write('<td width=300 align="left"><FONT COLOR="#153E7E" FACE="Arial" SIZE=1><b>' + str(expectedResult) + '</b></td>')
+    sFile.write('<td width=300 align="left"><FONT COLOR="#153E7E" FACE="Arial" SIZE=1><b>' + ActualResult.encode('ascii', 'ignore') + '</b></td>')
+    sFile.write('<td width=200 align="left"><FONT COLOR="#153E7E" FACE="Arial" SIZE=1><b><a href=' + str(sScreenShotPath) + '>' + screenShotName + '</b></td></tr> ')
         
 ##fetchSQLData()
 ##    setUp()

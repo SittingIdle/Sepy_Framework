@@ -24,5 +24,7 @@ time.sleep(5)
 
 ## Not a member ##
 GenericLib.clickObject("css=button")
+time.sleep(5)
+print "AFter Click on Try it"
 GenericLib.clickAlert()
 GenericLib.closeBrowser()
