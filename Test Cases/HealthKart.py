@@ -23,7 +23,7 @@ time.sleep(5)
 
 ## Not a member ##
 ##GenericLib.actionsOnMenu("LINK=protein supplements","LINK=Whey Proteins")
-GenericLib.actionsOnMenu("css=div[id='dropDownbox1']> ul > li[class='gm-mc brdr-t  gm-brdr-l-orange']>a", "css=a[class='gm-tc-nm maintainHover']")
+GenericLib.clickOnSubmenuItem("css=div[id='dropDownbox1']> ul > li[class='gm-mc brdr-t  gm-brdr-l-orange']>a", "css=a[class='gm-tc-nm maintainHover']")
 
 
 #### Select Free registration link ##

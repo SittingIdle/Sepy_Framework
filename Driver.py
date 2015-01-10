@@ -33,7 +33,8 @@ def readTestSuiteXlsxFile():
     setValueIntoINIFile(sIniFilePath , "Other", "TestCase_FileName", "")
     setValueIntoINIFile(sIniFilePath , "Other", "Test Case Name", "")
     testSuiteFileName = getValueFromINIFile_Dr(sIniFilePath , "Environment", "testSuiteFile")
-    oWorkbook = xlrd.open_workbook(testSuiteFileName)
+    testSuitePath = frameworkPath + "\\Test Suite\\" + testSuiteFileName
+    oWorkbook = xlrd.open_workbook(testSuitePath)
     testSuiteSheetFileName = getValueFromINIFile_Dr(sIniFilePath , "Environment", "testSuiteSheetName")
     oWorksheet = oWorkbook.sheet_by_name(testSuiteSheetFileName)
     rowCount = oWorksheet.nrows
